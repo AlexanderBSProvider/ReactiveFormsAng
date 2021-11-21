@@ -1,0 +1,75 @@
+<div class="container">
+  <form [formGroup]="myForm" >
+    <div>
+      <label>Name </label>
+      <input name="name" formControlName="userName" />
+      <div class="alert alert-danger"
+           *ngIf="myForm.controls['userName'].invalid && myForm.controls['userName'].touched">
+        Name is required
+      </div>
+    </div>
+
+    <div>
+      <label>Surname </label>
+      <input name="surname" formControlName="userSurname" />
+      <div class="alert alert-danger"
+           *ngIf="myForm.controls['userSurname'].invalid && myForm.controls['userSurname'].touched">
+        Surname is required
+      </div>
+    </div>
+
+    <div>
+      <label>Email </label>
+      <input name="email" formControlName="userEmail" />
+      <div class="alert alert-danger"
+           *ngIf="myForm.controls['userEmail'].invalid && myForm.controls['userEmail'].touched">
+        {{ isUserNameExisted() ? 'This email is existed' : "Invalid email" }}
+      </div>
+
+    </div>
+
+    <div>
+      <label>Date </label>
+      <input formControlName="userDate" [matDatepicker]="picker">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label>Technology</mat-label>
+        <mat-select formControlName = "userTechnology">
+          <mat-option *ngFor="let tech of technologies" [value] = "tech">{{tech}}</mat-option>
+
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label>Version</mat-label>
+        <mat-select formControlName = "userVersion" >
+          <mat-option *ngFor="let version of getVersion(myForm.controls['userTechnology'].value)" [value] = "version">{{version}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div formArrayName="userHobbies">
+      <div *ngFor="let hobby of getFormsControls()['controls']; let i = index">
+        <label>Hobby</label>
+        <input formControlName="{{i}}" />
+      </div>
+    </div>
+
+    <div>
+      <button (click)="addHobbies()">
+        Add hobby
+      </button>
+    </div>
+
+    <div>
+      <button (click)="submit()" [disabled]= "myForm.invalid">Submit </button>
+    </div>
+  </form>
+</div>
